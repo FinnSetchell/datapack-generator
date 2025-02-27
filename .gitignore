@@ -1,0 +1,3 @@
+# Ignore output and downloaded repo folders
+datapack_output/
+downloaded_repo/

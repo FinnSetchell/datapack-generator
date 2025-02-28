@@ -1,9 +1,0 @@
-{
-    "pack.mcmeta": {
-        "${mod_name}" : "A datapack to generate the structures from Moog's End structures"
-    },
-    "data/mes/worldgen/structure": {
-        "mes:mes_generic_jigsaw_structure": "minecraft:jigsaw"
-    }
-    
-}

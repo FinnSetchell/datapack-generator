@@ -5,6 +5,7 @@ import zipfile
 import io
 import json
 from tqdm import tqdm
+import re
 
 # Configuration
 GITHUB_REPO_URL = 'https://github.com/FinnSetchell/MoogsEndStructures'
@@ -71,16 +72,41 @@ def apply_replacements(replacements, base_path):
                     with open(file_path, 'r') as f:
                         content = f.read()
                     for old_text, new_text in changes.items():
-                        content = content.replace(old_text, new_text)
+                        if '->' in old_text:
+                            pattern = rf'^\s*{re.escape(old_text.replace("->", ""))}.*$'
+                            content = re.sub(pattern, new_text, content, flags=re.MULTILINE)
+                        else:
+                            content = content.replace(old_text, new_text)
                     with open(file_path, 'w') as f:
                         f.write(content)
         elif os.path.isfile(full_path):
             with open(full_path, 'r') as f:
                 content = f.read()
             for old_text, new_text in changes.items():
-                content = content.replace(old_text, new_text)
+                if '->' in old_text:
+                    pattern = rf'^\s*{re.escape(old_text.replace("->", ""))}.*$'
+                    content = re.sub(pattern, new_text, content, flags=re.MULTILINE)
+                else:
+                    content = content.replace(old_text, new_text)
             with open(full_path, 'w') as f:
                 f.write(content)
+
+def remove_trailing_commas(json_content):
+    # Remove trailing commas before closing braces and brackets
+    json_content = re.sub(r',\s*([}\]])', r'\1', json_content)
+    return json_content
+
+def clean_json_files(base_path):
+    for root, _, files in os.walk(base_path):
+        for file in files:
+            if file.endswith('.json'):
+                file_path = os.path.join(root, file)
+                with open(file_path, 'r') as f:
+                    content = f.read()
+                cleaned_content = remove_trailing_commas(content)
+                cleaned_content = '\n'.join([line for line in cleaned_content.splitlines() if line.strip() != ''])
+                with open(file_path, 'w') as f:
+                    f.write(cleaned_content)
 
 def create_datapack_structure(output_path, repo_name, icon_path, pack_mcmeta_path, data_folder_path, replacements):
     repo_folder = os.path.join(output_path, repo_name)
@@ -103,10 +129,13 @@ def create_datapack_structure(output_path, repo_name, icon_path, pack_mcmeta_pat
     # Apply replacements
     apply_replacements(replacements, repo_folder)
 
+    # Clean JSON files
+    clean_json_files(repo_folder)
+
 def main():
-    replacements = load_replacements(REPLACEMENTS_FILE)
-    print(json.dumps(replacements, indent=4))
     repo_name = os.path.basename(GITHUB_REPO_URL)
+    replacements_file = f"{repo_name}-replacements.json"
+    replacements = load_replacements(replacements_file)
     
     download_data_folder(GITHUB_REPO_URL, BRANCH_NAME, DOWNLOADED_REPO_PATH, FOLDER_PATH)
 

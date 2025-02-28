@@ -1,12 +1,9 @@
 {
-    "global": {
-        "PLACEHOLDER": "new_value",
-        "ANOTHER_PLACEHOLDER": "another_value"
-    },
-    "resources/pack.mcmeta": {
+    "pack.mcmeta": {
         "${mod_name}" : "A datapack to generate the structures from Moog's End structures"
     },
-    "resources/data/mes/worldgen/structure": {
+    "data/mes/worldgen/structure": {
         "mes:mes_generic_jigsaw_structure": "minecraft:jigsaw"
     }
+    
 }

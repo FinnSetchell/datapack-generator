@@ -61,46 +61,28 @@ def load_replacements(file_path):
         print(f"Error loading replacements file: {e}")
         return {}
 
-def apply_replacements(content, replacements):
-    for placeholder, new_value in replacements.items():
-        content = content.replace(placeholder, new_value)
-    return content
-
-def apply_replacements_to_file(file_path, replacements):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-        
-        if file_path.endswith('.json'):
-            data = json.loads(content)
-            data = apply_replacements(json.dumps(data), replacements)
-            content = json.dumps(json.loads(data), indent=4)
-        else:
-            content = apply_replacements(content, replacements)
-        
-        with open(file_path, 'w') as file:
-            file.write(content)
-        print(f"Applied replacements to {file_path}")
-    except Exception as e:
-        print(f"Error applying replacements to {file_path}: {e}")
-        print(f"Replacements: {replacements}")
-
-def apply_replacements(replacements):
-    for path, path_replacements in replacements.items():
-        if path == "global":
-            continue
-        full_path = os.path.join(DOWNLOADED_REPO_PATH, path)
-        if os.path.isfile(full_path):
-            apply_replacements_to_file(full_path, path_replacements)
-        elif os.path.isdir(full_path):
-            for root, dirs, files in os.walk(full_path):
+def apply_replacements(replacements, base_path):
+    for path, changes in replacements.items():
+        full_path = os.path.join(base_path, path)
+        if os.path.isdir(full_path):
+            for root, _, files in os.walk(full_path):
                 for file in files:
                     file_path = os.path.join(root, file)
-                    apply_replacements_to_file(file_path, path_replacements)
-        else:
-            print(f"Path not found: {full_path}")
+                    with open(file_path, 'r') as f:
+                        content = f.read()
+                    for old_text, new_text in changes.items():
+                        content = content.replace(old_text, new_text)
+                    with open(file_path, 'w') as f:
+                        f.write(content)
+        elif os.path.isfile(full_path):
+            with open(full_path, 'r') as f:
+                content = f.read()
+            for old_text, new_text in changes.items():
+                content = content.replace(old_text, new_text)
+            with open(full_path, 'w') as f:
+                f.write(content)
 
-def create_datapack_structure(output_path, repo_name, icon_path, pack_mcmeta_path, data_folder_path):
+def create_datapack_structure(output_path, repo_name, icon_path, pack_mcmeta_path, data_folder_path, replacements):
     repo_folder = os.path.join(output_path, repo_name)
     
     clear_folder(repo_folder)
@@ -118,6 +100,9 @@ def create_datapack_structure(output_path, repo_name, icon_path, pack_mcmeta_pat
     # Copy data folder
     shutil.copytree(data_folder_path, os.path.join(repo_folder, 'data'))
 
+    # Apply replacements
+    apply_replacements(replacements, repo_folder)
+
 def main():
     replacements = load_replacements(REPLACEMENTS_FILE)
     print(json.dumps(replacements, indent=4))
@@ -125,9 +110,8 @@ def main():
     
     download_data_folder(GITHUB_REPO_URL, BRANCH_NAME, DOWNLOADED_REPO_PATH, FOLDER_PATH)
 
-    create_datapack_structure(DATAPACK_OUTPUT_PATH, repo_name, os.path.join(DOWNLOADED_REPO_PATH, ICON_PATH), os.path.join(DOWNLOADED_REPO_PATH, PACK_MCMETA_PATH), os.path.join(DOWNLOADED_REPO_PATH, DATA_FOLDER_PATH))
+    create_datapack_structure(DATAPACK_OUTPUT_PATH, repo_name, os.path.join(DOWNLOADED_REPO_PATH, ICON_PATH), os.path.join(DOWNLOADED_REPO_PATH, PACK_MCMETA_PATH), os.path.join(DOWNLOADED_REPO_PATH, DATA_FOLDER_PATH), replacements)
     
-    apply_replacements(replacements)
     print(f"Datapack created at {DATAPACK_OUTPUT_PATH}")
 
 if __name__ == '__main__':

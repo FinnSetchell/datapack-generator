@@ -1,0 +1,39 @@
+{
+    "pack.mcmeta": {
+        "${mod_name}" : "A datapack to generate the structures from Moog's Voyager structures",
+        "\"pack_format\": 15": "\"pack_format\": 15,\n        \"supported_formats\": [0, 1000]"
+    },
+    "data/mvs/worldgen/structure": {
+        "\"max_distance_from_center\": 35,": "",
+        "\"max_distance_from_center\": 90,": "",
+        "\"mvs:mvs_generic_jigsaw_structure\"": "\"minecraft:jigsaw\",\n  \"max_distance_from_center\": 80,\n  \"use_expansion_hack\": false",
+        "\"mvs:mvs_generic_nether_jigsaw_structure\"": "\"minecraft:jigsaw\",\n  \"max_distance_from_center\": 80,\n  \"use_expansion_hack\": false",
+        "\"terrain_height_radius_check\": ->": "",
+        "\"allowed_terrain_height_range\": ->": "",
+        "\"y_allowance\": {\n        \"min_y_allowed\": 45\n    },": "",
+        "\"y_allowance\": {\n    \"min_y_allowed\": 45\n  },": "",
+        "\"cannot_spawn_in_liquid\": true,": ""
+    },
+    "data/mvs/worldgen/structure_set": {
+        "mvs:advanced_random_spread": "minecraft:random_spread",
+        "\"min_distance_from_world_origin\": ->": ""
+    },
+    "data/mvs/tags/worldgen/biome/has_structure/end_biomes.json": {
+        "#minecraft:is_end": "minecraft:end_highlands",
+        "{\n      \"id\": \"#forge:is_end\",\n      \"required\": false\n    },": "",
+        "{\n      \"id\": \"#c:in_the_end\",\n      \"required\": false\n    },": "",
+        "{\n      \"id\": \"#c:end_islands\",\n      \"required\": false\n    }": ""
+    },
+    "data/mvs/worldgen/structure/other_decoration/crimson_enchanting_table.json": {
+        "\"land_search_direction\": \"HIGHEST_LAND\",\n  \"project_start_to_heightmap\": \"WORLD_SURFACE_WG\",": "",
+        "absolute\": 0": "absolute\": 35"
+    },
+    "data/mvs/worldgen/structure/other_decoration/nether_devil.json": {
+        "\"land_search_direction\": \"HIGHEST_LAND\",\n  \"project_start_to_heightmap\": \"WORLD_SURFACE_WG\",": "",
+        "absolute\": 0": "absolute\": 35"
+    },
+    "data/mvs/worldgen/structure/well/wells/nether_well.json": {
+        "\"land_search_direction\": \"HIGHEST_LAND\",\n  \"project_start_to_heightmap\": \"WORLD_SURFACE_WG\",": "",
+        "absolute\": 0": "absolute\": 35"
+    }
+}

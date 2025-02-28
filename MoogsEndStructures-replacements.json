@@ -1,13 +1,14 @@
 {
     "pack.mcmeta": {
-        "${mod_name}" : "A datapack to generate the structures from Moog's End structures"
+        "${mod_name}" : "A datapack to generate the structures from Moog's End structures\n   \"supported_formats\": [0, 1000]"
     },
     "data/mes/worldgen/structure": {
         "\"mes:mes_generic_jigsaw_structure\"": "\"minecraft:jigsaw\",\n  \"max_distance_from_center\": 80,\n  \"use_expansion_hack\": false",
         "\"terrain_height_radius_check\": ->": "",
         "\"allowed_terrain_height_range\": ->": "",
         "\"y_allowance\": {\n        \"min_y_allowed\": 45\n    },": "",
-        "\"y_allowance\": {\n    \"min_y_allowed\": 45\n  },": ""
+        "\"y_allowance\": {\n    \"min_y_allowed\": 45\n  },": "",
+        "\"cannot_spawn_in_liquid\": true,": ""
     },
     "data/mes/worldgen/structure_set": {
         "mes:advanced_random_spread": "minecraft:random_spread",
